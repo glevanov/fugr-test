@@ -3,11 +3,11 @@
     <h1 class="heading">Users</h1>
     <table class="users">
       <tr class="users__headings">
-        <th class="users__heading">id</th>
-        <th class="users__heading">firstName</th>
-        <th class="users__heading">lastName</th>
-        <th class="users__heading">email</th>
-        <th class="users__heading">phone</th>
+        <th class="users__heading" @click="sortUsers('id')">id</th>
+        <th class="users__heading" @click="sortUsers('firstName')">firstName</th>
+        <th class="users__heading" @click="sortUsers('lastName')">lastName</th>
+        <th class="users__heading" @click="sortUsers('email')">email</th>
+        <th class="users__heading" @click="sortUsers('phone')">phone</th>
       </tr>
       <tr
         class="users__row"
@@ -41,7 +41,14 @@
       pageNumber: 0,
       maxPages: 10,
       usersList: [],
-      url: 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
+      url: 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}',
+      sortedByDescending: {
+        id: false,
+        firstName: false,
+        lastName: false,
+        email: false,
+        phone: false
+      }
     }),
     computed: {
       pageCount () {
@@ -56,6 +63,22 @@
       }
     },
     methods: {
+      sortUsers(key) {
+        const resetSortedStatus = () => {
+          for (const key of Object.keys(this.sortedByDescending)) {
+            this.sortedByDescending[key] = false;
+          }
+        }
+
+        if (!this.sortedByDescending[key]) {
+          this.usersList.sort((a, b) => (a[key] < b[key]) ? -1 : 1);
+          resetSortedStatus()
+          this.sortedByDescending[key] = true;
+        } else {
+          this.usersList.sort((a, b) => (a[key] < b[key]) ? 1 : -1);
+          resetSortedStatus()
+        }
+      },
       getList () {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', this.url, false);
@@ -105,6 +128,9 @@
   }
 
   .users__headings {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    cursor: pointer;
     font-size: 24px;
     line-height: normal;
   }
