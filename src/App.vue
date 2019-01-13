@@ -11,20 +11,55 @@
       </tr>
       <tr
         class="users__row"
-        v-for="el in small">
-        <td class="users__cell">{{ el.id }}</td>
-        <td class="users__cell">{{ el.firstName }}</td>
-        <td class="users__cell">{{ el.lastName }}</td>
-        <td class="users__cell">{{ el.email }}</td>
-        <td class="users__cell">{{ el.phone }}</td>
+        v-for="item in paginatedData">
+        <td class="users__cell">{{ item.id }}</td>
+        <td class="users__cell">{{ item.firstName }}</td>
+        <td class="users__cell">{{ item.lastName }}</td>
+        <td class="users__cell">{{ item.email }}</td>
+        <td class="users__cell">{{ item.phone }}</td>
       </tr>
     </table>
+    <div class="pagination">
+      <button class="pagination__button pagination__button--previous"
+              @click="prevPage"
+              :disabled="pageNumber===0"
+      >Previous
+      </button>
+      <p class="pagination__counter">Page {{ pageNumber + 1 }} out of {{ pageCount }}</p>
+      <button class="pagination__button pagination__button--next"
+              @click="nextPage"
+              :disabled="pageNumber >= pageCount - 1"
+      >Next
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
+    methods: {
+      nextPage () {
+        this.pageNumber++
+      },
+      prevPage () {
+        this.pageNumber--
+      }
+    },
+    computed: {
+      pageCount () {
+        const length = this.small.length
+        const size = this.maxPages
+        return Math.ceil(length / size)
+      },
+      paginatedData () {
+        const start = this.pageNumber * this.maxPages
+        const end = start + this.maxPages
+        return this.small.slice(start, end)
+      }
+    },
     data: () => ({
+      pageNumber: 0,
+      maxPages: 10,
       small: [{
         'id': 870,
         'firstName': 'Linda',
@@ -282,10 +317,11 @@
         'address': {'streetAddress': '5633 At Ct', 'city': 'Midlothian', 'state': 'SD', 'zip': '99133'},
         'description': 'tellus lacus neque aenean tincidunt mi lacus id pretium nec malesuada egestas sed pharetra dolor hendrerit consequat id mi vestibulum pulvinar et nec consectetur sed pulvinar et consequat egestas sit eget tincidunt'
       }]
-    }),
-    methods: {}
+    })
   }
 </script>
+
+
 
 <style scoped>
   .container {
@@ -329,5 +365,31 @@
   .users__cell {
     padding: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.5);
+  }
+
+  .pagination {
+    align-items: center;
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .pagination__button {
+    background-color: #0260ee;
+    border: 0;
+    border-radius: 5px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    padding: 10px;
+    text-transform: uppercase;
+  }
+  .pagination__button:disabled {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .pagination__counter {
+    margin: 0;
+    margin-right: 10px;
+    margin-left: 10px;
   }
 </style>
