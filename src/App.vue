@@ -321,21 +321,20 @@
   }
 </script>
 
-
-
 <style scoped>
   .container {
     background-color: #ffffff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 6px;
-    padding: 20px;
-    margin: 20px;
     display: inline-block;
+    margin: 20px;
+    padding: 20px;
     text-align: left;
   }
 
   .heading {
+    color: #0260ee;
     margin: 0;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -343,8 +342,8 @@
   }
 
   .users {
-    border-collapse: collapse;
     background-color: #ffffff;
+    border-collapse: collapse;
   }
 
   .users__headings {
